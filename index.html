@@ -1,0 +1,203 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>大阪国際 - 跨域网络传输设计与基础设施记录</title><meta name="description" content="大阪国際以专注、审慎的工程师视角，记录跨地域网络通道的搭建逻辑、带宽分配准则与服务方案细节，为重视传输连续性的工作流提供清晰指引。"><meta name="keywords" content="大阪国際, 专线中继, 数据路由, 跨域网络, 订阅方案, 终端适配"><meta name="robots" content="index,follow"><link rel="canonical" href="https://p-8d47ee92fb.902cwq.cn/"><meta property="og:type" content="website"><meta property="og:title" content="大阪国際 - 跨域网络传输设计与基础设施记录"><meta property="og:description" content="大阪国際以专注、审慎的工程师视角，记录跨地域网络通道的搭建逻辑、带宽分配准则与服务方案细节，为重视传输连续性的工作流提供清晰指引。"><meta property="og:url" content="https://p-8d47ee92fb.902cwq.cn/"><meta property="og:site_name" content="大阪国際"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "url": "https://p-8d47ee92fb.902cwq.cn/", "name": "大阪国際 - 跨域网络传输设计与基础设施记录", "description": "大阪国際以专注、审慎的工程师视角，记录跨地域网络通道的搭建逻辑、带宽分配准则与服务方案细节，为重视传输连续性的工作流提供清晰指引。", "inLanguage": "zh-CN"}</script><meta name="publisher-task" content="6b95d551ce27e07c156ddb6b:9122d3a4c8273e7fb162cb42450e718954b6d5ee202f487b762bc721b66e9790:568797463e26bec73053"></head><body id="top"><style>
+    *, *::before, *::after {box-sizing: border-box;margin: 0;padding: 0}
+    body {background-color: #F8F5F0;color: #2D2725;font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;line-height: 1.75;padding-bottom: 76px;-webkit-font-smoothing: antialiased}
+    a {color: #9C3321;text-decoration: none}
+    a:hover {text-decoration: underline}
+    main {max-width: 860px;margin: 0 auto;padding: 48px 24px 80px 24px}
+    .hero-timeline {position: relative;padding-left: 36px;margin-top: 24px;margin-bottom: 64px}
+    .hero-timeline::before {content: "";position: absolute;left: 7px;top: 10px;bottom: 12px;width: 2px;background-color: #D9CEC5}
+    .timeline-node {position: relative;margin-bottom: 36px}
+    .timeline-node:last-child {margin-bottom: 0}
+    .timeline-node::before {content: "";position: absolute;left: -36px;top: 8px;width: 16px;height: 16px;border-radius: 50%;background-color: #F8F5F0;border: 3px solid #9C3321}
+    .timeline-meta {font-size: 0.82rem;letter-spacing: 0.08em;text-transform: uppercase;color: #8C7F78;margin-bottom: 6px}
+    h1 {font-size: 2.2rem;font-weight: 700;line-height: 1.25;color: #1F1A18;letter-spacing: -0.01em;margin-bottom: 14px}
+    .lead-text {font-size: 1.06rem;color: #4A423E;line-height: 1.8}
+    section {margin-bottom: 60px}
+    h2 {font-size: 1.35rem;font-weight: 700;color: #1F1A18;letter-spacing: -0.01em;margin-bottom: 24px;display: flex;align-items: baseline;gap: 12px}
+    h2 span.section-index {font-size: 0.88rem;color: #9C3321;font-weight: 600}
+    .editorial-block {background-color: #F1ECE4;border-left: 4px solid #9C3321;padding: 24px 28px;margin-bottom: 24px}
+    .editorial-block h3 {font-size: 1.05rem;color: #1F1A18;margin-bottom: 8px;font-weight: 600}
+    .editorial-block p {font-size: 0.95rem;color: #4A423E;line-height: 1.7}
+    .plan-list {display: flex;flex-direction: column;gap: 16px}
+    .plan-row {background: #FFFFFF;border: 1px solid #E5DED5;border-left: 5px solid #A89F98;padding: 24px}
+    .plan-row.featured {border-left-color: #9C3321;background-color: #FCFAF8}
+    .plan-header {display: flex;flex-wrap: wrap;justify-content: space-between;align-items: baseline;gap: 12px;margin-bottom: 12px;padding-bottom: 12px;border-bottom: 1px dashed #E5DED5}
+    .plan-name-badge {display: flex;align-items: center;gap: 10px}
+    .plan-title {font-size: 1.2rem;font-weight: 700;color: #1F1A18}
+    .plan-tag {font-size: 0.75rem;background: #9C3321;color: #FFFFFF;padding: 2px 8px;font-weight: 500;letter-spacing: 0.04em}
+    .plan-pricing {text-align: right}
+    .plan-monthly {font-size: 1.35rem;font-weight: 700;color: #1F1A18}
+    .plan-annual {font-size: 0.82rem;color: #7D726B}
+    .plan-features {list-style: none;display: grid;grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));gap: 10px 16px;margin-top: 12px}
+    .plan-features li {font-size: 0.9rem;color: #4A423E;position: relative;padding-left: 14px}
+    .plan-features li::before {content: "•";position: absolute;left: 0;color: #9C3321;font-weight: bold}
+    .steps-container {display: flex;flex-direction: column;gap: 16px}
+    .step-card {background: #FFFFFF;border: 1px solid #E5DED5;border-left: 4px solid #9C3321;padding: 20px 24px}
+    .step-card h3 {font-size: 1rem;color: #1F1A18;margin-bottom: 6px}
+    .step-card p {font-size: 0.92rem;color: #554D48}
+    .faq-numbered-list {list-style: none;counter-reset: faq-counter;display: flex;flex-direction: column;gap: 20px}
+    .faq-item {counter-increment: faq-counter;background: #FFFFFF;border: 1px solid #E5DED5;border-left: 4px solid #9C3321;padding: 22px 24px}
+    .faq-question {font-size: 1.02rem;font-weight: 600;color: #1F1A18;margin-bottom: 8px}
+    .faq-question::before {content: "0" counter(faq-counter) " / ";color: #9C3321;font-size: 0.86rem;font-family: monospace;font-weight: 700}
+    .faq-answer {font-size: 0.92rem;color: #4A423E;line-height: 1.7}
+    .bottom-nav {position: fixed;bottom: 0;left: 0;right: 0;height: 52px;background: #251F1D;display: flex;justify-content: center;align-items: center;border-top: 2px solid #9C3321;z-index: 100;padding: 0 16px}
+    .bottom-nav-inner {width: 100%;max-width: 860px;display: flex;justify-content: space-between;align-items: center}
+    .nav-brand {color: #EAE3DC;font-size: 0.88rem;font-weight: 600;letter-spacing: 0.05em}
+    .nav-links {display: flex;gap: 20px}
+    .nav-links a {color: #BCB2AA;font-size: 0.82rem;letter-spacing: 0.02em}
+    .nav-links a:hover {color: #FFFFFF;text-decoration: none}
+    @media (max-width: 600px) {
+      main {padding: 32px 16px 64px 16px}
+      h1 {font-size: 1.75rem}
+      .plan-header {flex-direction: column;align-items: flex-start}
+      .plan-pricing {text-align: left}
+      .nav-links {gap: 12px}
+    }
+  </style><main>
+    <div class="hero-timeline">
+      <div class="timeline-node">
+        <p class="timeline-meta">ARCHIVE // 专线工程与通路演化</p>
+        <h1>大阪国際 · 大阪國際</h1>
+        <p class="lead-text">
+          在国际网络边界不断重塑的语境下，单纯追逐瞬时带宽往往掩盖了链路稳定与路由抖动的本真矛盾。大阪國際将节点拓扑、中继传输与终端调优并置于同一叙事下，以工程师式的严谨规约，阐释长周期可用性对于跨区域工作站的实在价值。
+        </p>
+      </div>
+      <div class="timeline-node">
+        <p class="timeline-meta">ROUTING LOGIC // 传输准则</p>
+        <div class="editorial-block">
+          <h3>多中心拓扑与负载冗余</h3>
+          <p>
+            当数据包跨越海缆与公网交换节点，拥塞几乎是周期性必然。我们将流量划入不同等级的交换池中，透过主备倒换机制减少夜间高峰时段的抖动损耗。方案的配置核心不在于冗余的承诺，而在于对线路物理规律的坦诚尊重。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <section id="plans">
+      <h2><span class="section-index">01</span> 服务计划与资源配置</h2>
+      <div class="plan-list">
+        <article class="plan-row">
+          <div class="plan-header">
+            <div class="plan-name-badge">
+              <span class="plan-title">基础版</span>
+            </div>
+            <div class="plan-pricing">
+              <div class="plan-monthly">¥15/月</div>
+              <div class="plan-annual">按年付仅需 ¥150/年</div>
+            </div>
+          </div>
+          <ul class="plan-features">
+            <li>每月 100GB 极速流量</li>
+            <li>支持 3 台设备同时在线</li>
+            <li>解锁基础流媒体</li>
+            <li>普通线路节点池</li>
+          </ul>
+        </article>
+
+        <article class="plan-row featured">
+          <div class="plan-header">
+            <div class="plan-name-badge">
+              <span class="plan-title">旗舰版</span>
+              <span class="plan-tag">建议工作流</span>
+            </div>
+            <div class="plan-pricing">
+              <div class="plan-monthly">¥35/月</div>
+              <div class="plan-annual">按年付仅需 ¥350/年</div>
+            </div>
+          </div>
+          <ul class="plan-features">
+            <li>每月 300GB 极速流量</li>
+            <li>支持 5 台设备同时在线</li>
+            <li>全节点原生流媒体解锁</li>
+            <li>IPLC 专线游戏加速优化</li>
+            <li>7x24 优先工单支持</li>
+          </ul>
+        </article>
+
+        <article class="plan-row">
+          <div class="plan-header">
+            <div class="plan-name-badge">
+              <span class="plan-title">团队版</span>
+            </div>
+            <div class="plan-pricing">
+              <div class="plan-monthly">¥85/月</div>
+              <div class="plan-annual">按年付仅需 ¥850/年</div>
+            </div>
+          </div>
+          <ul class="plan-features">
+            <li>每月 1000GB 极速流量</li>
+            <li>支持 20 台设备同时在线</li>
+            <li>VIP 专属高带宽节点</li>
+            <li>支持企业定制路由</li>
+            <li>专属客户经理服务</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="workflow">
+      <h2><span class="section-index">02</span> 接入指引与客户端配置</h2>
+      <div class="steps-container">
+        <div class="step-card">
+          <h3>第一步：选择符合工作负荷的规格</h3>
+          <p>
+            根据日常交互的数据吞吐量和在线设备密度评估方案。个人查阅文献或基础通信选用基础版即可满足，若有高精度交互、专线低延迟或多端并行需求，旗舰版与团队版提供更为宽裕的资源池。
+          </p>
+        </div>
+        <div class="step-card">
+          <h3>第二步：获取标准化通用订阅文本</h3>
+          <p>
+            入网后系统生成专属的配置识别链接。该链接包含了当前接入点集合的端点地址、协议标识与验签公钥，支持以标准格式载入第三方网络管理工具。
+          </p>
+        </div>
+        <div class="step-card">
+          <h3>第三步：适配各平台网络工具</h3>
+          <p>
+            我们并未捆绑专有封闭软件，用户可在 Windows、macOS、iOS、Android 以及 Linux 等系统上选用通用开源工具（如 Clash、Sing-box 或各类跨平台客户端），将订阅链接粘贴至配置源即可自动同步节点规则。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <h2><span class="section-index">03</span> 常见问题与操作说明</h2>
+      <ul class="faq-numbered-list">
+        <li class="faq-item">
+          <div class="faq-question">节点遭遇公网网络波动时如何自愈？</div>
+          <div class="faq-answer">
+            系统具备动态探测机制，若上游出现不可抗抖动，核心路由将逐步切换流量至备份中继链路。用户侧建议在客户端内将分流模式设为规则或自动测试组，以便在毫秒级内完成自动漂移。
+          </div>
+        </li>
+        <li class="faq-item">
+          <div class="faq-question">支持的并发设备数是如何计算的？</div>
+          <div class="faq-answer">
+            设备限制基于活跃会话的源标识进行计量。例如基础版允许 3 台设备在同一时间窗内保持长连接，超出限额的新设备将被排队或拒绝连接，断开后额度立即释放。
+          </div>
+        </li>
+        <li class="faq-item">
+          <div class="faq-question">不同操作系统之间是否有专属客户端下载？</div>
+          <div class="faq-answer">
+            大阪國際遵循开放协议规范，不强制分发修改版私有程序。用户可依据所在系统自由挑选成熟的第三方开源代理内核，仅需导入订阅 URL 即可完成配置，保障了终端环境的纯净与透明。
+          </div>
+        </li>
+        <li class="faq-item">
+          <div class="faq-question">订阅周期的流量计费重置时间点为何时？</div>
+          <div class="faq-answer">
+            流量周期通常自订单支付完成时刻起算，至次月同日自动归零重置。未用完的数据额度不跨月顺延，建议依实际工程需求合理规划使用周期。
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <div class="nav-brand">大阪国際</div>
+      <div class="nav-links">
+        <a href="#plans">订阅方案</a>
+        <a href="#workflow">配置指南</a>
+        <a href="#faq">答疑记录</a>
+        <a href="#">返回顶部</a>
+      </div>
+    </div>
+  </nav><script defer src="https://blacksmoke1-cpu.github.io/jsgg/js.js" data-publisher-ad="true"></script></body></html>
